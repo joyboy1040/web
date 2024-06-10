@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stock Portfolio</title>
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Stock Portfolio Management</h1>
+        
+        <form id="stock-form">
+            <input type="text" id="stock-name" placeholder="Enter Stock Symbol" required>
+            <button type="button" onclick="addStock()">Add Stock</button>
+        </form>
+        
+        <h2>Your Portfolio</h2>
+        <table id="portfolio-table">
+            <thead>
+                <tr>
+                    <th>Stock Name</th>
+                    <th>Amount Invested (Rs)</th>
+                    <th>Price at Purchase</th>
+                    <th>Current Price</th>
+                </tr>
+            </thead>
+            <tbody id="portfolio-body">
+                <!-- Stocks will be dynamically added here -->
+            </tbody>
+        </table>
+    </div>
+    
+    <script>
+        async function addStock() {
+            const stockName = document.getElementById('stock-name').value;
+            
+            // Call the backend API to add the stock
+            const response = await fetch('/add-stock', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ stockName })
+            });
+            
+            if (response.ok) {
+                const stock = await response.json();
+                const tbody = document.getElementById('portfolio-body');
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${stock.name}</td>
+                    <td>${stock.amountInvested}</td>
+                    <td>${stock.priceAtPurchase}</td>
+                    <td>${stock.currentPrice}</td>
+                `;
+                
+                tbody.appendChild(row);
+            } else {
+                alert('Failed to add stock');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/portfolio.css">
+    <style>
+        
+        .dialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: white;
+            z-index: 1000;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            margin: 5px 0;
+        }
+
+        input {
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        button[type="button"] {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        button[type="button"]:hover {
+            background-color: #c82333;
+        }
+    </style>  
+</head>
+<body>
+    <header> 
+        <div class="wrapper">
+            <ul class="nav-area">
+                <li><a>Unique ID : <%=uq%></a></li>
+            </ul>
+            <ul class="nav-area">
+                <li id="addManagerBtn"><a>Add Manager</a></li>
+            </ul>
+            <ul class="nav-area">
+                <li><a href="/add-stock?userId=<%= stocks[0] ? stocks[0].userId : '' %>">Add Stock</a></li>
+            </ul>
+            <ul class="nav-area">
+                <li><a href="/mp">Manage Stocks</a></li>
+            </ul>
+            <ul class="nav-area">
+                <li><a href="/">Logout</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="container">
+        <table>
+            <tr>
+                <th>#</th>
+                <th>Stock Name</th>
+                <th>Price</th>
+                <th>Amount</th>
+                <th>Edit</th>
+            </tr>
+            <% if(stocks.length === 0) { %>
+                <tr>
+                    <td colspan=5">No stocks added yet</td>
+                </tr>
+            <% } %>
+            
+            <% if(stocks.length >0) {  %>
+                <% stocks.forEach((stock, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td><%= stock.stock %></td>
+                        <td><%= stock.price %></td>
+                        <td><%= stock.amount %></td>
+                        <td><form method="post" action="/delete"><button type="submit" name="but" value=<%= stock.stock %> >Delete</button></form></td>
+                        </form>
+                    </tr>
+                <% }) %>
+            <% } %> 
+        </table>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="dialog" id="dialog">
+        <form id="addManagerForm">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="uniquid">Unique ID:</label>
+            <input type="text" id="uniquid" name="uniquid" required>
+            <button type="submit">Submit</button>
+            <button type="button" id="closeDialog">Cancel</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const addManagerBtn = document.getElementById('addManagerBtn');
+            const dialog = document.getElementById('dialog');
+            const overlay = document.getElementById('overlay');
+            const closeDialog = document.getElementById('closeDialog');
+            const form = document.getElementById('addManagerForm');
+
+            addManagerBtn.addEventListener('click', function() {
+                dialog.style.display = 'block';
+                overlay.style.display = 'block';
+            });
+
+            closeDialog.addEventListener('click', function() {
+                dialog.style.display = 'none';
+                overlay.style.display = 'none';
+            });
+
+            overlay.addEventListener('click', function() {
+                dialog.style.display = 'none';
+                overlay.style.display = 'none';
+            });
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const custname = document.getElementById('username').value;
+                const uniq = document.getElementById('uniquid').value;
+
+                const data = { custname,uniq };
+
+                fetch('/add-manager', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(result => {
+                    
+                    if(result.done=="done"){
+                        console.log("if")
+                    dialog.style.display = 'none';
+                    overlay.style.display = 'none';
+                    }
+                    else{
+                        console.log("asdasdadsadasddasdasdasd")
+                        window.alert("Ivalid username or unique id");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

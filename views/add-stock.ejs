@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Stock</title>
+    <link rel="stylesheet" href="CSS/portfolio.css">
+    <style>
+        body {
+            background-image: url('path-to-your-background-image.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="wrapper">
+            <ul class="nav-area">
+                <li><a href="/portfolio">Portfolio</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Add Stock to Your Portfolio</h2>
+        <form action="/add-stock" method="POST">
+            <label for="symbol">Stock Symbol:</label>
+            <input type="text" id="symbol" name="stockName" required>
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price" required>
+            <label for="amountInvested">Amount Invested (in Rs):</label>
+            <input type="number" id="amountInvested" name="IAmount" required>
+            
+            <button type="submit">Add</button>
+        </form>
+    </div>
+</body>
+</html>

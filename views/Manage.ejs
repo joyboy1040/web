@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/portfolio.css">
+    <style>
+        button {
+            padding: 10px;
+            margin: 5px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        button[type="button"] {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        button[type="button"]:hover {
+            background-color: #c82333;
+        }
+    </style> 
+</head>
+<body>
+    <header> 
+        <div class="wrapper">
+            <ul class="nav-area">
+                <li><a href="/portfolio">Personal Stock</a></li>
+            </ul>
+            <ul class="nav-area">
+                <li><a href="/">Logout</a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="container">
+        <table>
+            <tr>
+                <th>#</th>
+                <th>username</th>
+                <th>Stock Name</th>
+                <th>Price</th>
+                <th>Amount</th>
+                <th>Edit</th>
+            </tr>
+            <% if(stocks.length === 0) { %>
+                <tr>
+                    <td colspan="6">No stocks added yet</td>
+                </tr>
+            <% } %>
+            <% if(stocks.length >0) {  %>
+                <% stocks.forEach((stock, index) => { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <td name="username"><%= stock.username %></td>
+                        <td name="stock"><%= stock.stock %></td>
+                        <td><%= stock.price %></td>
+                        <td><%= stock.amount %></td>
+                        <td><form method="post" action="/delete-admin">
+                            <input name="username" style="display: none" value=<%= stock.username %>>
+                            <button type="submit" name="but" value=<%= stock.stock %> >Delete</button>
+                        </form></td>
+                    </tr>
+                <% }) %>
+            <% } %>    
+        </table>
+    </div>
+</body>
+</html>
